@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .container{
+
+            width: 70vw;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            margin-top: 100px;
+
+
+            /* 1rem = 16px => usually used with font => dynamic */
+        }
+        .container>p{
+            font-size: 10%;
+        }
+        .containerTwo{
+            width: 70%;
+            font-size: 32px;
+        }
+        .containerTwo>p{
+            font-size: 20%;
+        }
+        .container>div{
+            text-align: center;
+        }
+        .container>div>img{
+            width: 90%;
+            height: 65%;
+        }
+        .navbar{
+            width: 100%;
+            /* width: 100vw; */
+            background:linear-gradient(110deg, #fdcd3b 60%, #ffed4b 60%);
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            top:0;
+            left: 0;
+        }
+        #search-input{
+            width: 30vw;
+            padding: 10px;
+        }
+        #search-btn{
+            height: 2rem;
+            font-size: large;
+            margin: 10px;
+            padding: 2px;
+            font:300;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            border-radius: 10%;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <input id="search-input" placeholder="Search Your Movie Name" >
+        <button id="search-btn">Search</button>
+    </div>
+
+    <div class="container">
+         <!-- <p>hello world</p> -->
+    </div>
+
+
+</body>
+<script>
+
+    let input = document.getElementById("search-input")
+    let btn = document.getElementById("search-btn")
+    let container = document.querySelector(".container")
+
+
+ function getData(movieName){
+    fetch(`http://www.omdbapi.com/?apikey=1e16119&type=movie&s=${movieName}`)
+    .then(function(response){
+        return response.json() // promise again
+    })
+    .then(function (res){
+         //console.log(res.Search)
+        showData(res.Search)
+    })
+ }
+
+
+ function showData(data){
+// console.log(data)
+   container.innerHTML = ""
+   data.forEach(function(ele,i){
+
+    let div = document.createElement("div")
+
+    let img = document.createElement('img')
+    img.src = ele.Poster
+
+    let title = document.createElement("p")
+    title.innerHTML = `<b>Title : </b> ${ele.Title}`
+
+    let year = document.createElement("p")
+    year.innerHTML = `<b>Year : </b> ${ele.Year}`
+
+    div.append(img , title , year)
+    container.append(div)
+   })
+ }
+
+//  getData("batman")
+
+
+btn.addEventListener("click" , function(){
+    let value = input.value
+    // console.log(value)
+    getData(value)
+    // getData()
+})
+
+    // getData()
+
+</script>
+</html>
